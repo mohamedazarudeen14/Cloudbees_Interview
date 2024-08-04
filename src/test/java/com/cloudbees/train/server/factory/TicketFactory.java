@@ -7,11 +7,13 @@ import com.cloudbees.train.SectionBookingResponse;
 import com.cloudbees.train.SectionRequest;
 import com.cloudbees.train.TicketPurchaseRequest;
 import com.cloudbees.train.TicketReceiptResponse;
+import com.cloudbees.train.server.entity.Journey;
 import com.cloudbees.train.server.entity.Seat;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TicketFactory {
     public static final String BOOKING_ID = "20240802210508";
@@ -30,7 +32,7 @@ public class TicketFactory {
     }
 
     public static Map<Seat, String> getTrainSeatsMapMockWithoutEmptySeats() {
-        Map<Seat, String> seats = new HashMap<>();
+        Map<Seat, String> seats = new ConcurrentHashMap<>();
         seats.put(getSeatMock(1, 1), "20240802210508");
         seats.put(getSeatMock(2, 1), "20240802210511");
 
@@ -38,7 +40,7 @@ public class TicketFactory {
     }
 
     public static Map<Seat, String> getTrainSeatsWithAvailableSeatsMock() {
-        Map<Seat, String> seats = new HashMap<>();
+        Map<Seat, String> seats = new ConcurrentHashMap<>();
         seats.put(getSeatMock(1, 1), BOOKING_ID);
         seats.put(getSeatMock(2, 1), StringUtils.EMPTY);
 
@@ -52,6 +54,21 @@ public class TicketFactory {
                 SECTION_A));
 
         return seatBookings;
+    }
+
+    public static Map<Journey, Double> getJourneysMapMock() {
+        Map<Journey, Double> journeys = new ConcurrentHashMap<>();
+        journeys.put(getJourney("London", "France"), 20d);
+        journeys.put(getJourney("belgium", "Swizerland"), 80d);
+
+        return journeys;
+    }
+
+    private static Journey getJourney(String from, String to) {
+        return Journey.builder()
+                .from(from)
+                .to(to)
+                .build();
     }
 
     public static TicketPurchaseRequest getTicketPurchaseRequestDtoMock(String firstName, String lastName,
@@ -74,6 +91,14 @@ public class TicketFactory {
         return TicketPurchaseRequest.newBuilder()
                 .setBoardingStation("London")
                 .setDestinationStation("France")
+                .build();
+    }
+
+    public static TicketPurchaseRequest getPurchaseRequestJourneyDetails(String fromStation, String toStation) {
+        return TicketPurchaseRequest.newBuilder()
+                .setBoardingStation(fromStation)
+                .setDestinationStation(toStation)
+                .setPassenger(getPassengerDtoMock(FIRST_NAME, LAST_NAME, EMAIL_ADDRESS))
                 .build();
     }
 

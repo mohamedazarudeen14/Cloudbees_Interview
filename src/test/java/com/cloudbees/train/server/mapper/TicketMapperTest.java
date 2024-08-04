@@ -28,7 +28,7 @@ class TicketMapperTest {
         var purchaseRequest = getTicketPurchaseRequestDtoMock("Albert",
                 "Einstein", "albert@gmail.com");
         var ticketReceipt = ticketMapper
-                .mapTicketReceiptForPurchase(seatMock, bookingId, purchaseRequest);
+                .mapTicketReceiptForPurchase(seatMock, bookingId, purchaseRequest, TICKET_COST);
 
         assertThat(ticketReceipt).isNotNull();
         assertTicketReceiptProperties(ticketReceipt, seatMock, bookingId, purchaseRequest);

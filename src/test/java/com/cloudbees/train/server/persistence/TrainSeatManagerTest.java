@@ -27,4 +27,11 @@ class TrainSeatManagerTest {
         assertThat(sectionASeats).hasSize(45);
         assertThat(sectionBSeats).hasSize(45);
     }
+
+    @Test
+    void should_validate_train_journeys_count() {
+        var travelJourneys = trainSeatManager.getTravelJourneys();
+
+        assertThat(travelJourneys).hasSize(1);
+    }
 }

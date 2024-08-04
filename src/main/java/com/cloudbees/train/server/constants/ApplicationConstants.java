@@ -19,4 +19,5 @@ public class ApplicationConstants {
     public static final String EMAIL_ADDRESS_NOT_MATCHING =
             "Passenger email address not matching with given booking id";
     public static final double TICKET_COST = 20d;
+    public static final String TRAIN_JOURNEY_DETAILS_NOT_FOUND = "Given journey not found for this train to book ticket";
 }

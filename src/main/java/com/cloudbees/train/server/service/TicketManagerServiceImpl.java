@@ -46,9 +46,17 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
         if (passengerSeat.isEmpty()) {
             return;
         }
+
+        var ticketCost = getJourneyTicketCost(request.getBoardingStation(),
+                request.getDestinationStation(), responseObserver);
+
+        if (ticketCost.isEmpty()) {
+            return;
+        }
+
         var bookingId = getBookingId();
         var ticketReceipt = ticketMapper
-                .mapTicketReceiptForPurchase(passengerSeat.get(), bookingId, request);
+                .mapTicketReceiptForPurchase(passengerSeat.get(), bookingId, request, ticketCost.get());
         seatsMap.replace(passengerSeat.get(), bookingId);
         seatBookings.put(bookingId, ticketReceipt);
 
@@ -207,7 +215,7 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
             return Optional.empty();
         }
 
-        if(StringUtils.isBlank(request.getBoardingStation()) || StringUtils.isBlank(request.getDestinationStation())) {
+        if (StringUtils.isBlank(request.getBoardingStation()) || StringUtils.isBlank(request.getDestinationStation())) {
             responseObserver.onError(Status.NOT_FOUND.withDescription(JOURNEY_DETAILS_ERROR_MESSAGE)
                     .asException());
             return Optional.empty();
@@ -265,6 +273,22 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
         }
 
         return booking;
+    }
+
+    private Optional<Double> getJourneyTicketCost(String from, String to,
+                                                  StreamObserver<TicketReceiptResponse> responseObserver) {
+        var travelJourneys = trainSeatManager.getTravelJourneys();
+
+        var requiredJourney = travelJourneys.keySet().stream().filter(obj -> obj.getFrom().equalsIgnoreCase(from)
+                && obj.getTo().equalsIgnoreCase(to)).findFirst();
+
+        if (requiredJourney.isEmpty()) {
+            responseObserver.onError(Status.NOT_FOUND.withDescription(TRAIN_JOURNEY_DETAILS_NOT_FOUND)
+                    .asException());
+            return Optional.empty();
+        }
+
+        return Optional.of(travelJourneys.get(requiredJourney.get()));
     }
 
     private String getBookingId() {

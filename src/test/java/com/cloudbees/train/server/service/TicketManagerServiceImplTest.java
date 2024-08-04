@@ -174,6 +174,37 @@ class TicketManagerServiceImplTest {
     }
 
     @Test
+    void should_throw_exception_when_train_journey_not_found() {
+        var purchaseDto = getPurchaseRequestJourneyDetails("Switzerland", "France");
+        var bookings = getTrainSeatBookingsMock(FIRST_NAME, LAST_NAME, EMAIL_ADDRESS_2);
+        var seats = getTrainSeatsWithAvailableSeatsMock();
+
+        given(trainSeatManager.getTrainSeats()).willReturn(seats);
+        given(trainSeatManager.getSeatBookings()).willReturn(bookings);
+        given(trainSeatManager.getTravelJourneys()).willReturn(getJourneysMapMock());
+
+        ticketManagerServiceImpl.bookTicket(purchaseDto, ticketReceiptResponseStreamObserver);
+
+        var error = ticketReceiptResponseStreamObserver.getError();
+
+        assertThat(error).isInstanceOf(StatusException.class);
+        assertThat(error).hasMessageContaining(TRAIN_JOURNEY_DETAILS_NOT_FOUND);
+
+        purchaseDto = getPurchaseRequestJourneyDetails("london", "belgium");
+
+        ticketManagerServiceImpl.bookTicket(purchaseDto, ticketReceiptResponseStreamObserver);
+
+        error = ticketReceiptResponseStreamObserver.getError();
+
+        assertThat(error).isInstanceOf(StatusException.class);
+        assertThat(error).hasMessageContaining(TRAIN_JOURNEY_DETAILS_NOT_FOUND);
+
+        verify(trainSeatManager, times(2)).getTrainSeats();
+        verify(trainSeatManager, times(2)).getSeatBookings();
+        verify(trainSeatManager, times(2)).getTravelJourneys();
+    }
+
+    @Test
     void should_execute_ticket_booking() {
         var purchaseDto = getTicketPurchaseRequestDtoMock(FIRST_NAME, LAST_NAME, EMAIL_ADDRESS);
         var bookings = getTrainSeatBookingsMock(FIRST_NAME, LAST_NAME, EMAIL_ADDRESS_2);
@@ -182,8 +213,9 @@ class TicketManagerServiceImplTest {
                 2, SECTION_A);
 
         given(trainSeatManager.getTrainSeats()).willReturn(seats);
-        given(ticketMapper.mapTicketReceiptForPurchase(any(), any(), any())).willReturn(ticketReceipt);
+        given(ticketMapper.mapTicketReceiptForPurchase(any(), any(), any(), anyDouble())).willReturn(ticketReceipt);
         given(trainSeatManager.getSeatBookings()).willReturn(bookings);
+        given(trainSeatManager.getTravelJourneys()).willReturn(getJourneysMapMock());
 
         ticketManagerServiceImpl.bookTicket(purchaseDto, ticketReceiptResponseStreamObserver);
 
@@ -196,7 +228,8 @@ class TicketManagerServiceImplTest {
 
         verify(trainSeatManager).getSeatBookings();
         verify(trainSeatManager).getTrainSeats();
-        verify(ticketMapper).mapTicketReceiptForPurchase(any(), any(), any());
+        verify(trainSeatManager).getTravelJourneys();
+        verify(ticketMapper).mapTicketReceiptForPurchase(any(), any(), any(), anyDouble());
     }
 
     @Test

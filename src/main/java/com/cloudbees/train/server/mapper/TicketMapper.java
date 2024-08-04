@@ -12,12 +12,13 @@ import static com.cloudbees.train.server.constants.ApplicationConstants.TICKET_C
 
 public class TicketMapper {
     public TicketReceiptResponse mapTicketReceiptForPurchase(Seat seat, String bookingId,
-                                                             TicketPurchaseRequest ticketPurchaseRequest) {
+                                                             TicketPurchaseRequest ticketPurchaseRequest,
+                                                             double ticketCost) {
         return TicketReceiptResponse.newBuilder()
                 .setBoardingStation(ticketPurchaseRequest.getBoardingStation())
                 .setDestinationStation(ticketPurchaseRequest.getDestinationStation())
                 .setPassenger(ticketPurchaseRequest.getPassenger())
-                .setPricePaid(TICKET_COST)
+                .setPricePaid(ticketCost)
                 .setSection(seat.getSectionName())
                 .setSeatNumber(seat.getSeatNumber())
                 .setBookingId(bookingId)
