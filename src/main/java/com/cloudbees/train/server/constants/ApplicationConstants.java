@@ -5,6 +5,7 @@ public class ApplicationConstants {
             "Ticket purchase request not exist and cannot proceed further";
     public static final String BOOKED_REQUEST_ERROR_MESSAGE = "Booked request is null and cannot proceed further";
     public static final String SECTION_REQUEST_ERROR_MESSAGE = "Section request is null and cannot proceed further";
+    public static final String JOURNEY_DETAILS_ERROR_MESSAGE = "Boarding and destination station details not provided";
     public static final String NO_SEATS_AVAILABLE_FOR_NEW_BOOKING = "No Seats Available for booking";
     public static final String PASSENGER_DETAILS_EMPTY_ERROR_MESSAGE =
             "Passenger firsName, lastName and emailAddress are mandatory for ticket booking";

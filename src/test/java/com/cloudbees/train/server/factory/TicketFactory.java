@@ -64,6 +64,22 @@ public class TicketFactory {
                 .build();
     }
 
+    public static TicketPurchaseRequest getTicketPurchaseRequestDtoWithoutJourneyDetailsMock(String fromStation, String toStation) {
+        return TicketPurchaseRequest.newBuilder()
+                .setBoardingStation(fromStation)
+                .setDestinationStation(toStation)
+                .setTicketPrice(20d)
+                .build();
+    }
+
+    public static TicketPurchaseRequest getPurchaseRequestWithoutPassenger() {
+        return TicketPurchaseRequest.newBuilder()
+                .setBoardingStation("London")
+                .setDestinationStation("France")
+                .setTicketPrice(20d)
+                .build();
+    }
+
     public static TicketReceiptResponse getTicketReceiptDtoMock(String firstName, String lastName, String emailAddress,
                                                                 int seatNumber, String sectionName) {
         return TicketReceiptResponse.newBuilder()

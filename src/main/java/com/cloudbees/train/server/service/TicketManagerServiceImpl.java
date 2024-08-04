@@ -207,7 +207,13 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
             return Optional.empty();
         }
 
-        if (isPassengerDetailsNotExist(request.getPassenger())) {
+        if(StringUtils.isBlank(request.getBoardingStation()) || StringUtils.isBlank(request.getDestinationStation())) {
+            responseObserver.onError(Status.NOT_FOUND.withDescription(JOURNEY_DETAILS_ERROR_MESSAGE)
+                    .asException());
+            return Optional.empty();
+        }
+
+        if (!request.hasPassenger() || isPassengerDetailsNotExist(request.getPassenger())) {
             responseObserver.onError(Status.FAILED_PRECONDITION.withDescription(PASSENGER_DETAILS_EMPTY_ERROR_MESSAGE)
                     .asException());
             return Optional.empty();

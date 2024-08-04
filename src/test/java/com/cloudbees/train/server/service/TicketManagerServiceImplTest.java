@@ -71,14 +71,46 @@ class TicketManagerServiceImplTest {
     }
 
     @Test
+    void should_throw_exception_when_journey_details_not_provided() {
+        var purchaseRequest = getTicketPurchaseRequestDtoWithoutJourneyDetailsMock("", "France");
+
+        given(trainSeatManager.getTrainSeats()).willReturn(getTrainSeatsWithAvailableSeatsMock());
+
+        ticketManagerServiceImpl.bookTicket(purchaseRequest, ticketReceiptResponseStreamObserver);
+
+        var error = ticketReceiptResponseStreamObserver.getError();
+        assertThat(error).isInstanceOf(StatusException.class);
+        assertThat(error).hasMessageContaining(JOURNEY_DETAILS_ERROR_MESSAGE);
+
+        var purchaseRequest_2 = getTicketPurchaseRequestDtoWithoutJourneyDetailsMock("London", "");
+
+        ticketManagerServiceImpl.bookTicket(purchaseRequest_2, ticketReceiptResponseStreamObserver);
+
+        error = ticketReceiptResponseStreamObserver.getError();
+        assertThat(error).isInstanceOf(StatusException.class);
+        assertThat(error).hasMessageContaining(JOURNEY_DETAILS_ERROR_MESSAGE);
+
+        verify(trainSeatManager, times(2)).getTrainSeats();
+        verify(trainSeatManager, times(2)).getSeatBookings();
+    }
+
+    @Test
     void should_throw_exception_when_passenger_details_has_empty_values() {
         var purchaseDto = getTicketPurchaseRequestDtoMock(StringUtils.EMPTY, LAST_NAME, EMAIL_ADDRESS);
 
         given(trainSeatManager.getTrainSeats()).willReturn(getTrainSeatsWithAvailableSeatsMock());
 
-        ticketManagerServiceImpl.bookTicket(purchaseDto, ticketReceiptResponseStreamObserver);
+        ticketManagerServiceImpl.bookTicket(getPurchaseRequestWithoutPassenger(), ticketReceiptResponseStreamObserver);
 
         var error = ticketReceiptResponseStreamObserver.getError();
+
+        assertThat(error).isInstanceOf(StatusException.class);
+        assertThat(error).hasMessageContaining(PASSENGER_DETAILS_EMPTY_ERROR_MESSAGE);
+
+        ticketManagerServiceImpl.bookTicket(purchaseDto, ticketReceiptResponseStreamObserver);
+
+        error = ticketReceiptResponseStreamObserver.getError();
+
         assertThat(error).isInstanceOf(StatusException.class);
         assertThat(error).hasMessageContaining(PASSENGER_DETAILS_EMPTY_ERROR_MESSAGE);
 
@@ -88,6 +120,7 @@ class TicketManagerServiceImplTest {
         ticketManagerServiceImpl.bookTicket(purchaseDto_1, ticketReceiptResponseStreamObserver);
 
         error = ticketReceiptResponseStreamObserver.getError();
+
         assertThat(error).isInstanceOf(StatusException.class);
         assertThat(error).hasMessageContaining(PASSENGER_DETAILS_EMPTY_ERROR_MESSAGE);
 
@@ -97,11 +130,12 @@ class TicketManagerServiceImplTest {
         ticketManagerServiceImpl.bookTicket(purchaseDto_2, ticketReceiptResponseStreamObserver);
 
         error = ticketReceiptResponseStreamObserver.getError();
+
         assertThat(error).isInstanceOf(StatusException.class);
         assertThat(error).hasMessageContaining(PASSENGER_DETAILS_EMPTY_ERROR_MESSAGE);
 
-        verify(trainSeatManager, times(3)).getTrainSeats();
-        verify(trainSeatManager, times(3)).getSeatBookings();
+        verify(trainSeatManager, times(4)).getTrainSeats();
+        verify(trainSeatManager, times(4)).getSeatBookings();
     }
 
     @Test
