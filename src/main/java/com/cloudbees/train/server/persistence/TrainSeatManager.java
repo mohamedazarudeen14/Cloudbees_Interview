@@ -1,8 +1,7 @@
-package com.cloudbees.train.persistence;
+package com.cloudbees.train.server.persistence;
 
-import com.cloudbees.train.dto.TicketReceiptDto;
-import com.cloudbees.train.entity.Seat;
-import com.cloudbees.train.enums.TrainSection;
+import com.cloudbees.train.TicketReceiptResponse;
+import com.cloudbees.train.server.entity.Seat;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TrainSeatManager {
     private static Map<Seat, String> trainSeats;
-    private static Map<String, TicketReceiptDto> seatBookings;
+    private static Map<String, TicketReceiptResponse> seatBookings;
 
     public TrainSeatManager() {
         if (trainSeats == null) {
@@ -24,31 +23,34 @@ public class TrainSeatManager {
         return trainSeats;
     }
 
-    public Map<String, TicketReceiptDto> getSeatBookings() {
+    public Map<String, TicketReceiptResponse> getSeatBookings() {
         return seatBookings;
     }
 
     private static void initializeTrainSeats() {
         int totalSeats = 90;
         //Splitting the total seats equally in each two sections
-        TrainSection trainSection = TrainSection.SECTION_A;
+        String sectionName = "SECTION A";
+        int sectionId = 1;
         int seatNumber = 1;
         for (int i = 0; i < totalSeats; i++) {
-            var seat = getSeat(trainSection.getSectionId(), seatNumber);
+            var seat = getSeat(sectionId, seatNumber, sectionName);
             trainSeats.put(seat, StringUtils.EMPTY);
             seatNumber++;
 
             if (((totalSeats / 2) - 1) == i) {
-                trainSection = TrainSection.SECTION_B;
+                sectionName = "SECTION B";
+                sectionId = 2;
                 seatNumber = 1;
             }
         }
     }
 
-    private static Seat getSeat(int sectionId, int seatNumber) {
+    private static Seat getSeat(int sectionId, int seatNumber, String sectionName) {
         return Seat.builder()
                 .SectionId(sectionId)
                 .seatNumber(seatNumber)
+                .sectionName(sectionName)
                 .build();
     }
 }

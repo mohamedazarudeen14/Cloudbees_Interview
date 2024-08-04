@@ -1,7 +1,5 @@
-package com.cloudbees.train.persistence;
+package com.cloudbees.train.server.persistence;
 
-import com.cloudbees.train.enums.TrainSection;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,11 +20,11 @@ class TrainSeatManagerTest {
         assertThat(seatBookings.size()).isZero();
 
         var sectionASeats = seats.keySet().stream()
-                .filter(obj -> obj.getSectionId() == TrainSection.SECTION_A.getSectionId());
+                .filter(obj -> obj.getSectionId() == 1);
         var sectionBSeats = seats.keySet().stream()
-                        .filter(obj -> obj.getSectionId() == TrainSection.SECTION_B.getSectionId());
+                .filter(obj -> obj.getSectionId() == 2);
 
-        Assertions.assertThat(sectionASeats).hasSize(45);
-        Assertions.assertThat(sectionBSeats).hasSize(45);
+        assertThat(sectionASeats).hasSize(45);
+        assertThat(sectionBSeats).hasSize(45);
     }
 }
