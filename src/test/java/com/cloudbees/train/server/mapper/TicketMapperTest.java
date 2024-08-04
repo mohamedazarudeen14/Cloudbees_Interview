@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 
+import static com.cloudbees.train.server.constants.ApplicationConstants.TICKET_COST;
 import static com.cloudbees.train.server.factory.TicketFactory.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,7 +78,7 @@ class TicketMapperTest {
         assertEquals(ticketReceipt.getPassenger(), purchaseRequest.getPassenger());
         assertEquals(ticketReceipt.getSeatNumber(), seat.getSeatNumber());
         assertEquals(ticketReceipt.getSection(), SECTION_A);
-        assertEquals(ticketReceipt.getPricePaid(), purchaseRequest.getTicketPrice());
+        assertEquals(ticketReceipt.getPricePaid(), TICKET_COST);
         assertEquals(ticketReceipt.getBookingId(), bookingId);
     }
 }

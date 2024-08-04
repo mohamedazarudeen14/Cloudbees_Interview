@@ -8,6 +8,8 @@ import com.cloudbees.train.server.entity.Seat;
 
 import java.util.List;
 
+import static com.cloudbees.train.server.constants.ApplicationConstants.TICKET_COST;
+
 public class TicketMapper {
     public TicketReceiptResponse mapTicketReceiptForPurchase(Seat seat, String bookingId,
                                                              TicketPurchaseRequest ticketPurchaseRequest) {
@@ -15,7 +17,7 @@ public class TicketMapper {
                 .setBoardingStation(ticketPurchaseRequest.getBoardingStation())
                 .setDestinationStation(ticketPurchaseRequest.getDestinationStation())
                 .setPassenger(ticketPurchaseRequest.getPassenger())
-                .setPricePaid(ticketPurchaseRequest.getTicketPrice())
+                .setPricePaid(TICKET_COST)
                 .setSection(seat.getSectionName())
                 .setSeatNumber(seat.getSeatNumber())
                 .setBookingId(bookingId)

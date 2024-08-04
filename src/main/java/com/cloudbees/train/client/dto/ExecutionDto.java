@@ -11,7 +11,6 @@ public class ExecutionDto {
                                                                  String lastName, String emailAddress) {
         return TicketPurchaseRequest
                 .newBuilder()
-                .setTicketPrice(20d)
                 .setBoardingStation(fromStation)
                 .setDestinationStation(toStation)
                 .setPassenger(getPassenger(firstName, lastName, emailAddress))

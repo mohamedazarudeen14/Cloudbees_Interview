@@ -60,7 +60,6 @@ public class TicketFactory {
                 .setPassenger(getPassengerDtoMock(firstName, lastName, emailAddress))
                 .setBoardingStation("London")
                 .setDestinationStation("France")
-                .setTicketPrice(20d)
                 .build();
     }
 
@@ -68,7 +67,6 @@ public class TicketFactory {
         return TicketPurchaseRequest.newBuilder()
                 .setBoardingStation(fromStation)
                 .setDestinationStation(toStation)
-                .setTicketPrice(20d)
                 .build();
     }
 
@@ -76,7 +74,6 @@ public class TicketFactory {
         return TicketPurchaseRequest.newBuilder()
                 .setBoardingStation("London")
                 .setDestinationStation("France")
-                .setTicketPrice(20d)
                 .build();
     }
 

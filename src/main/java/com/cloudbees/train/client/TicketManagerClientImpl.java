@@ -66,11 +66,11 @@ public class TicketManagerClientImpl {
     }
 
     private void getReceipt() {
-        System.out.println("Enter booking id to get receipt");
+        System.out.println("Enter booking id from your receipt");
         Scanner in = new Scanner(System.in);
 
         String bookingId = in.next();
-        System.out.println("Enter given email address while ticket booking");
+        System.out.println("Enter given email address used while ticket booking");
         String emailAddress = in.next();
 
         var request = getBookingRequest(bookingId, emailAddress);
@@ -96,11 +96,11 @@ public class TicketManagerClientImpl {
     }
 
     private void deleteBooking() {
-        System.out.println("Enter section id to delete booking");
+        System.out.println("Enter booking id from your receipt to delete your booking");
         Scanner in = new Scanner(System.in);
 
         String bookingId = in.next();
-        System.out.println("Enter given email address while ticket booking");
+        System.out.println("Enter given email address used while ticket booking");
         String emailAddress = in.next();
 
         var request = getBookingRequest(bookingId, emailAddress);
@@ -110,11 +110,11 @@ public class TicketManagerClientImpl {
     }
 
     private void modifySeat() {
-        System.out.println("Enter section id to modify seat");
+        System.out.println("Enter booking id from your receipt");
         Scanner in = new Scanner(System.in);
 
         String bookingId = in.next();
-        System.out.println("Enter given email address while ticket booking");
+        System.out.println("Enter given email address used while ticket booking");
         String emailAddress = in.next();
 
         var request = getBookingRequest(bookingId, emailAddress);

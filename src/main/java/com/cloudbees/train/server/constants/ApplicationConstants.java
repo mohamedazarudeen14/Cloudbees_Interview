@@ -18,4 +18,5 @@ public class ApplicationConstants {
             "Passenger email address not matched for seat modification";
     public static final String EMAIL_ADDRESS_NOT_MATCHING =
             "Passenger email address not matching with given booking id";
+    public static final double TICKET_COST = 20d;
 }

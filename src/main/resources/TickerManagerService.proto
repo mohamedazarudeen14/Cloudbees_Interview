@@ -15,8 +15,7 @@ message Passenger {
 message TicketPurchaseRequest {
   string boardingStation = 1;
   string destinationStation = 2;
-  double ticketPrice = 3;
-  Passenger passenger = 4;
+  Passenger passenger = 3;
 }
 
 message SectionBookingResponse {
