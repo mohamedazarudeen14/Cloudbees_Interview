@@ -15,4 +15,6 @@ public class ApplicationConstants {
     public static final String NO_SEATS_AVAILABLE_FOR_MODIFICATION_ERROR_MESSAGE = "No Seats available for seat change";
     public static final String EMAIL_ADDRESS_NOT_MATCHING_ERROR_MESSAGE =
             "Passenger email address not matched for seat modification";
+    public static final String EMAIL_ADDRESS_NOT_MATCHING =
+            "Passenger email address not matching with given booking id";
 }

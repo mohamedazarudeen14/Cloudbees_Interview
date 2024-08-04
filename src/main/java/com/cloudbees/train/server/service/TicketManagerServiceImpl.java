@@ -77,7 +77,7 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
             return;
         }
 
-        var ticketReceipt = validatePassengerEmailBeforeAnyChanges(seatBookings,
+        var ticketReceipt = validatePassengerEmail(seatBookings,
                 request.getBookingId(), request.getEmailAddress(), responseObserver);
 
         responseObserver.onNext(ticketReceipt);
@@ -136,6 +136,9 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
 
         bookings.remove(booking.getBookingId());
         seatsMap.replace(bookedSeat.get(), StringUtils.EMPTY);
+
+        responseObserver.onNext(Empty.newBuilder().build());
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -236,22 +239,22 @@ public class TicketManagerServiceImpl extends TicketManagerServiceGrpc.TicketMan
     }
 
     private boolean isPassengerDetailsNotExist(Passenger passenger) {
-        return StringUtils.isEmpty(passenger.getFirstName())
-                || StringUtils.isEmpty(passenger.getLastName())
-                || StringUtils.isEmpty(passenger.getEmailAddress());
+        return StringUtils.isBlank(passenger.getFirstName())
+                || StringUtils.isBlank(passenger.getLastName())
+                || StringUtils.isBlank(passenger.getEmailAddress());
     }
 
     private boolean isValidEmailAddress(String email) {
         return EmailValidator.getInstance().isValid(email);
     }
 
-    private TicketReceiptResponse validatePassengerEmailBeforeAnyChanges(Map<String, TicketReceiptResponse> seatBookings,
-                                                                         String bookingId, String emailAddress,
-                                                                         StreamObserver<TicketReceiptResponse> responseObserver) {
+    private TicketReceiptResponse validatePassengerEmail(Map<String, TicketReceiptResponse> seatBookings,
+                                                         String bookingId, String emailAddress,
+                                                         StreamObserver<TicketReceiptResponse> responseObserver) {
         var booking = seatBookings.get(bookingId);
 
         if (!booking.getPassenger().getEmailAddress().equalsIgnoreCase(emailAddress)) {
-            responseObserver.onError(Status.INVALID_ARGUMENT.withDescription(EMAIL_ADDRESS_NOT_MATCHING_ERROR_MESSAGE)
+            responseObserver.onError(Status.INVALID_ARGUMENT.withDescription(EMAIL_ADDRESS_NOT_MATCHING)
                     .asException());
         }
 

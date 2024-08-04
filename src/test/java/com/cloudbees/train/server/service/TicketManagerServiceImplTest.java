@@ -203,7 +203,7 @@ class TicketManagerServiceImplTest {
 
         var error = ticketReceiptResponseStreamObserver.getError();
         assertThat(error).isInstanceOf(StatusException.class);
-        assertThat(error).hasMessageContaining(EMAIL_ADDRESS_NOT_MATCHING_ERROR_MESSAGE);
+        assertThat(error).hasMessageContaining(EMAIL_ADDRESS_NOT_MATCHING);
 
         verify(trainSeatManager).getTrainSeats();
         verify(trainSeatManager).getSeatBookings();
